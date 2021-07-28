@@ -1,0 +1,55 @@
+## no-debug-dir.efi does not have a debug directory (it only has 6 directory entries).
+## We check that we handle that case properly.
+# RUN: llvm-objcopy --add-section .sect_name=%p/Inputs/no-debug-dir.efi %p/Inputs/no-debug-dir.efi %t
+# RUN: obj2yaml %t | FileCheck %s --check-prefixes=CHECK-ADD
+
+# CHECK-ADD:    NumberOfRvaAndSize: 6
+
+## We can use this yaml to generate the binary when we have support for a
+## variable NumberOfRvaAndSize in yaml2obj.
+--- !COFF
+OptionalHeader:
+  AddressOfEntryPoint: 4096
+  ImageBase:       0
+  SectionAlignment: 4096
+  FileAlignment:   512
+  MajorOperatingSystemVersion: 0
+  MinorOperatingSystemVersion: 0
+  MajorImageVersion: 0
+  MinorImageVersion: 0
+  MajorSubsystemVersion: 0
+  MinorSubsystemVersion: 0
+  Subsystem:       IMAGE_SUBSYSTEM_EFI_APPLICATION
+  DLLCharacteristics: [  ]
+  SizeOfStackReserve: 0
+  SizeOfStackCommit: 0
+  SizeOfHeapReserve: 0
+  SizeOfHeapCommit: 0
+  NumberOfRvaAndSize: 6
+  ExportTable:
+    RelativeVirtualAddress: 0
+    Size:            0
+  ImportTable:
+    RelativeVirtualAddress: 0
+    Size:            0
+  ResourceTable:
+    RelativeVirtualAddress: 0
+    Size:            0
+  ExceptionTable:
+    RelativeVirtualAddress: 0
+    Size:            0
+  CertificateTable:
+    RelativeVirtualAddress: 0
+    Size:            0
+  BaseRelocationTable:
+    RelativeVirtualAddress: 0
+    Size:            0
+header:
+  Machine:         IMAGE_FILE_MACHINE_AMD64
+  Characteristics: [ ]
+sections:
+  - Name:            foo
+    Characteristics: [ ]
+    Alignment:       4
+symbols:
+...
